@@ -52,58 +52,63 @@ void print_registers()
 
 int main()
 {	
+    memory[0xfffe] = 0x8000;
     regs[R6] = USP;
 	memory[regs[PC]] = 0x106f;
-	uint16_t opcode = memory[regs[PC]];
-	uint16_t instruction = (opcode & 0xf000) >> 12;
-    regs[R0] = 0;
-    regs[R1] = 1;
-    // expected R0 = 63
-	switch (instruction)
-	{
-	case BR:
-		{
-            puts("It is BR");
-		}
-		break;
-	case ADD:	
-		{
-			puts("It is ADD");	
-            add(opcode);
-            ++regs[PC];
-            print_registers();
-		}
-		break;
-    case LD:
-        break;
-    case ST:
-        break;
-    case JSR:
-        break;
-    case AND:
-        break;
-    case LDR:
-        break;
-    case STR:
-        break;
-    case RTI:
-        break;
-    case NOT:
-        break;
-    case LDI:
-        break;
-    case STI:
-        break;
-    case JMP:
-        break;
-    case invalid:
-        break;
-    case LEA:
-        break;
-    case TRAP:
-        break;
+    while (memory[0xfffe] & 0x8000)
+    {
+        uint16_t opcode = memory[regs[PC]];
+        uint16_t instruction = (opcode & 0xf000) >> 12;
+        regs[R0] = 0;
+        regs[R1] = 1;
+        // expected R0 = 63
+        switch (instruction)
+        {
+        case BR:
+            {
+                puts("It is BR");
+            }
+            break;
+        case ADD:	
+            {
+                puts("It is ADD");	
+                add(opcode);
+                ++regs[PC];
+                print_registers();
+                memory[0xfffe] &= 0x7fff;
+            }
+            break;
+        case LD:
+            break;
+        case ST:
+            break;
+        case JSR:
+            break;
+        case AND:
+            break;
+        case LDR:
+            break;
+        case STR:
+            break;
+        case RTI:
+            break;
+        case NOT:
+            break;
+        case LDI:
+            break;
+        case STI:
+            break;
+        case JMP:
+            break;
+        case invalid:
+            break;
+        case LEA:
+            break;
+        case TRAP:
+            break;
 
-	}
+        }
+    }
 	printf("Hello, LC-3! %d\n", regs[R2]);
 	return 0;
 }
